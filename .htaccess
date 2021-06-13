@@ -1,0 +1,7 @@
+addDefaultCharset utf-8
+RewriteEngine on 
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php
+
+# пишется для того чтобы все что введет пользователь не увело нас со странице index.php для того чтобы не переходить по всем имеющимся стр а подключасть их по необходимости. строчки со  по 5 можно использовать всегда как по дефолту
