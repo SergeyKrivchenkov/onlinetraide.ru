@@ -15,7 +15,7 @@ return [
     'catalogue/get_client_cart' => [
         'controller' => 'catalogue',
         'action' => 'get_client_cart'
-    ], // в CatalogueController будет вызываться этот метод. описан он будет в model Catalogue
+    ],
 
     'catalogue/delete_from_cart' => [
         'controller' => 'catalogue',
@@ -40,5 +40,5 @@ return [
         'action' => 'index'
     ]
 
-    //public/images/comps_cats.png
+
 ];

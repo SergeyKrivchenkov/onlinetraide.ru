@@ -65,23 +65,7 @@ $count_pages = ceil($count_products / 2) // где ceil округление в 
     <div class="modal-content">
         <h4 id="modal-products-name">Корзина покупок</h4>
 
-        <!-- //!коментим эту верстку так как она отрабатывается ниже через foreach. Если этого не сделать то в корзине будет постоянно показываться 1 лишний товар по сравнению с кол-вом его в БД -->
-        <!-- <div class="row">
-            <div class="col s12">
-                <div class="card">
-                    <div class="card-image">
-                        <img class="modal-product-image" src="" style="width:180px;display:inline-block">
-                        <p class="" style="vertical-align:top; display:inline-block; width:400px; vertical-align: top;">
-                            Товар: <span class="modal-product-name"><?= $product['name'] ?> </span>
-                            <br>
-                            Количество: <span class=""><input type="number" name="amout" value=""> </span>
-                            <br>
-                            Цена: <span class="modal-product-price"> <?= $product['price'] . ' ₽' ?></span>
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div> -->
+
 
         <div id="modal-products-content-a" class="modal-client-cart">
         </div>
@@ -102,7 +86,7 @@ $count_pages = ceil($count_products / 2) // где ceil округление в 
 
     <?php for ($i = 1; $i <= $count_pages; $i++) : // здесь не забываем о знаке : после оператора вместо скобки
     ?>
-        <?php $class = ($cur_page == $i) ? ' active' : ''; // здесь если $cur_page (т.е. текущая стр.) совпала с $i (счетчиком) это означаем что данной li которая совподаем с тек стр. добовляем класс active с пробелом, а иначе в переменную класс запишется ничего т.е ''. Пишем это в теле оператора для того чтобы автоматизировать присвоение класса active в имеющееся li
+        <?php $class = ($cur_page == $i) ? ' active' : '';
         ?>
 
         <!-- здесь вставляем $i из оператора for для автоматизации нумерации пагинатора-->
@@ -119,20 +103,8 @@ $count_pages = ceil($count_products / 2) // где ceil округление в 
 <!-- <script src="/public/scripts/modal.js"></script> -->
 
 <script>
-    // todo код по модальному окну перенесли в папку со скриптами
-    // document.addEventListener('DOMContentLoaded', function() {
-    //     var elems = document.querySelectorAll('.modal');
-    //     var instances = M.Modal.init(elems, 'open');
-    // });
-    // ---------------------------------------
-
-    //  ------готовим модальное окно к действии вместе с карточками товаров.----------
-
-    //console.log($('li'));// выдает все лишки
-
-    // вешаем событие для работы jQuery с кнопкой купить (теперь понимаем на какую конкретно кнопку купить нажали)
     $('.cards').on('click', '.modal-trigger', function() {
-        // console.log($(this).closest('.card').find('.product-image'));
+
 
         let productImage = $(this).closest('.card').find('.product-image').attr('src'); // получаем путь до картинки 
         let productName = $(this).closest('.card').find('.product-name').text(); // имя продукта текстом
@@ -140,42 +112,27 @@ $count_pages = ceil($count_products / 2) // где ceil округление в 
         // console.log(productPrice.replace(' ₽', ''));
         let productId = $(this).data('id');
 
-        // пишем что и куда вывести без перезагрузки стр
 
-        // $('.modal-product-image').attr('src', productImage);
-        // $('.modal-product-name').text(productName);
-        // $('.modal-product-price').text(productPrice);
-
-        // console.log(productImage, productName, productPrice, productId);
         //todo работа ajax проверяется при клике в карточке товара на кнопку купить
         if (<?= (isset($_SESSION['auth']['id']) and !empty($_SESSION['auth']['id'])) ? $_SESSION['auth']['id'] : 'false'; ?>) {
             $.ajax({
                 method: 'post',
-                url: "/catalogue/add_to_cart", // стр ответственная за обработку инф кот отправляем т.е создаем php стр в кот созд сценарий как должна обрабатываться информ кот будет от сюда посылать.
+                url: "/catalogue/add_to_cart",
                 data: {
-                    product_id: productId, // product_id это название столбца табл из БД, productId это переменная из скрипта выше с присвоиным значением 
-                    count: 1, // 1 по дефолту ставим
-                    price: productPrice.replace(' ₽', '') // обрезаем знак валюты и лишний пробел перед знаком Р для записи в БД только чисел
+                    product_id: productId,
+                    count: 1,
+                    price: productPrice.replace(' ₽', '')
                 }
-                // context: document.body
-                // beforeSend: function() {
-                //     alert('Start sending'); // действие непосредственно перед отправкой запроса
-                // }
+
             }).done(function(resp) {
-                // в done садержаться промисы, resp - это ответ который будет дан от сервера, в теле находится функция кот сработает когда результат успешной выполнении работы то этому элементу добовляется класс done
-                // $(this).addClass("done");
-                // console.log(resp);
+
                 if (resp == 'false') {
                     alert('Произошла ошибка. Попробуйте позже!');
                 } else {
-                    // console.log(resp);// выведет массив со всеми передавваемыми данными
+
                     var products = JSON.parse(resp);
-                    //res смотреть из CatalogueController & Catalogue
-                    //const products = jQuery.parseJSON(resp); //jQuery.parseJSON(resp) исп для преобразования ассоциативного массива в js объект
-                    // console.log(products);// вывод js массива
+
                     var productCard = '';
-                    //console.log(product); // выводит товары находящееся в БД у зарегистрированного пользователя
-                    //! для удаления товара ниже используем скрытый тег input с атрибутом hiden до этого для видимости результата проставляли value="${product.id} в окончательном варианте его нет"
                     products.forEach(product => {
                         productCard += `
                         <div class="row">
@@ -207,19 +164,14 @@ $count_pages = ceil($count_products / 2) // где ceil округление в 
 
         } else {
 
-            //это скрипт для модального окна для вывода что пользователь не авторизован. Он скопирован с matirialize
 
-            var elems = document.querySelectorAll('.modal'); // взять все классы .modal кот есть на странице и присвой переменной
-            var instances = M.Modal.init(elems, 'open'); // M.Modal функция с matirialize. Инициализируется открывание модальных окон при щелчке
+            var elems = document.querySelectorAll('.modal');
+            var instances = M.Modal.init(elems, 'open');
 
-            // instance.open(); // запуск открытия модального окна при перезагрузке стр. эту фугкцию будем запускать в Controller ветке else.
 
-            var instance = M.Modal.getInstance(document.querySelector('#modal-products')); // берем конкретное модальное окно которое показывает товар в корзине
-            //$('#modal_product').modal();//запускает модальное окно
-            instance.destroy(); //уничтожает модальное окно, а именно '#modal-products'
+            var instance = M.Modal.getInstance(document.querySelector('#modal-products'));
+            instance.destroy();
 
-            // alert('Вы не авторизованны');
-            // var instance = M.Modal.getInstance(document.querySelector('.modal'));
             instance = M.Modal.getInstance(document.querySelector('#modal-auth'));
             $('#modal-auth h4').html('<label style="font-size:20px;color:#f44336">Для добовления товара в корзину необходимо авторизироваться.</label>');
             instance.open();

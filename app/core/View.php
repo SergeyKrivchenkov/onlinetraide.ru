@@ -5,37 +5,35 @@ namespace app\core;
 class View // это базовый класс который определяет какой конкретно класс будет подключен
 {
 
-    protected $route; // это путь из route
-    protected $path; // задали название файла с видом который нужно будет подключить
-    protected $layout = 'default'; // задаем шаблон (то что при отображении в браузере не будет изменяться footer, header, saidbar. Для ГИБКОГО! изменения шаблона (время года, темная или светлая тема) задаем 'default')
-    public function __construct($route) // снова принимаем наш массив (маршрут) с путями controller & action 
+    protected $route;
+    protected $path;
+    protected $layout = 'default';
+    public function __construct($route)
     {
-        $this->route = $route; // запоминаем путь после debug($route); создаем в папке view папку main в которой созд. файл index.php (там будем отображать скорее всего верстку)
-        $this->path = $route['controller'] . '/' . $route['action']; // формируем путь до файла main index
-        //$this->render(); // запускаем для отображения этого файла (запускаем здесь для понимания). Будет запускаться из модел и только тогад когда получим информацию из БД
+        $this->route = $route;
+        $this->path = $route['controller'] . '/' . $route['action'];
     }
-    public function render($data) //отображает информацию из вида (шаблонов) на стр. для формирования визуальной формы. Здесь $data это $arr передаваемый из CatalogueController а именно из стр $this->view->render($arr)
+
+    public function render($data)
     {
 
         // debug($data);
-        //путь к шаблону который должен подключаться
-        $layout = "app/views/layouts/{$this->layout}.php"; // это шаблон кот одинаков и будет подключ на каждой стр.
-        $view = "app/views/{$this->path}.php"; // подключаем вид здесь, в зависимости от пути кот формируется в $this->path = $route['controller'] . '/' . $route['action']; (подключаем вид либо главной стр. либо вид каталого, либо отображение чего либо в каталоге и т.п.) 
-        // путь до файла с видом кот будет отображаться в браузере
+
+        $layout = "app/views/layouts/{$this->layout}.php";
+        $view = "app/views/{$this->path}.php";
 
 
         if (file_exists($view)) {
             // если файл сущ то подключаем
-            ob_start(); // включаем механизм ответственный за буферезацию (т.н. складирование с возможностью последующего вывода когда это понадобиться)
-            require_once $view; // подключение вида
-            $content = ob_get_clean(); //записали информацию из буфера в переменную очищаем информацию из буфера обмена
-
+            ob_start();
+            require_once $view;
+            $content = ob_get_clean();
         } else {
             $content = "<img src='/public/images/errors/404.png width='100%'>"; // todo здесь ошибку присваиваем свойству так как иначе вывод ошибки ломает верстку, а $content выводится в layout согласно архитектуре между header & futer
         }
         if (file_exists($layout)) {
-            // если шаблон сущ то подключаем
-            require_once $layout; // формирование конкретной стр  можно представить как копирование файла и вставку его сюда как ctrl C & ctrl V
+
+            require_once $layout;
         } else {
             echo "<img src='/public/images/errors/404.png' width='100%'>";
         }

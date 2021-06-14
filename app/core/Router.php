@@ -4,16 +4,15 @@ namespace app\core; // где namespace определяем простратс�
 
 class Router
 {
-    private $routes = []; //это бубут маршруты
+    private $routes = [];
     private $params = [];
     public function __construct()
     {
-        // echo __CLASS__; // это магическая контстанта зарезервированная функция выдает полный путь до файла с классом
-        $routes_arr = require_once 'app/config/routes.php'; //подключаем файл с маршрутами
+
+        $routes_arr = require_once 'app/config/routes.php';
         // debug($routes_arr);
         foreach ($routes_arr as $route => $params) {
-            //debug($route); // это key для метода foreach
-            //debug($params); // это значение этого ключа
+
             $this->add($route, $params);
         }
     }

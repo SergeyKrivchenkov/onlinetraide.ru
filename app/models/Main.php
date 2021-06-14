@@ -1,12 +1,12 @@
 <?php
-// этот файл работает с информ на главной стр.
+
 namespace app\models;
 
-use app\core\Model; // так как лежат в разных местах (подключаем для доступа к $this->db)
+use app\core\Model;
+
 class Main extends Model
 {
-    // в этом классе можем работать с данными сформированными из БД, обращение к которой было осущественно в классе Model 
-    //эти методы пойдут к БД, отсюда информ должна уйти в maincontroller
+
 
     public function getPages()
     {

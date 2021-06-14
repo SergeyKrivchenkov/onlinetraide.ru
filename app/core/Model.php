@@ -36,21 +36,4 @@ abstract class Model
             return false;
         }
     }
-
-
-    // ------------запрос
-    // public function queryAll($sql)
-    // {
-    //     debug($this->db);
-    //     /*
-    //     $stmt = $this->db->prepare($sql); // подготавливаем запрос
-    //     $stmt->execute(); // выполняем запрос
-    //     echo 'It is works';
-    //     // debug($stmt->fetchAll());
-    //     return $stmt->fetchAll(); // выдаем запрос
-    //     */
-    // }
-
-
-
 }
